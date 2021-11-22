@@ -1,3 +1,11 @@
+/*
+Author: Schuyler Asplin
+Topographical Sort of an Adjacency List representation of a graph
+CSCD320 Algorithms Prog4 Professor Xu
+
+Singly Linked List class used only for holding the topographically sorted verticies.
+here nodes represent verticies for simplicity.
+ */
 public class TopoSLL {
     public Node head;
     public Node tail;

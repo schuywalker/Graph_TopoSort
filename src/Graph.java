@@ -1,3 +1,10 @@
+/*
+Author: Schuyler Asplin
+Topographical Sort of an Adjacency List representation of a graph
+CSCD320 Algorithms Prog4 Professor Xu
+
+Graph function with DFS and TopoSort
+ */
 public class Graph {
 
     public SLL[] adjList;    // adjacency list representation of our graph

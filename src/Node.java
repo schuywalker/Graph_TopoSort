@@ -1,3 +1,12 @@
+/*
+Author: Schuyler Asplin
+Topographical Sort of an Adjacency List representation of a graph
+CSCD320 Algorithms Prog4 Professor Xu
+
+Node class. Used by SLL for representing edges and for TopoSLL for representing verticies.
+The latter is only used for final result output.
+ */
+
 public class Node {
 
     private int value;
