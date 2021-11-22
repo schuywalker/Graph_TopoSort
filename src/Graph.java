@@ -1,6 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 public class Graph {
 
     public SLL[] adjList;    // adjacency list representation of our graph
@@ -19,7 +16,10 @@ public class Graph {
 
     public void printAdjList(){
         for (int i = 0; i < this.adjList.length; i++){
-            if (this.adjList[i].getLLsize() > 0) {
+            if (this.adjList[i] == null) {
+                //do nothing. this saves program if a number (including 0) is not present in dag
+            }
+            else if (this.adjList[i].getLLsize() > 0) {
                 this.adjList[i].printList();
             }
             else if (this.adjList[i].getLLsize() == 0)
@@ -31,9 +31,8 @@ public class Graph {
 
 
         if (vert.visited == false) {
-            System.out.println("DFS on "+vert.key);
-//        System.out.println(s.getValue());
             vert.visited = true;
+            //System.out.println("DFS on "+vert.key);
         }
 
 
@@ -55,81 +54,111 @@ public class Graph {
 
 
 
-    public int DepthFirstSearchTopo(SLL vert, SLL callerSLL, int GlobalTimeF){
-    //same as regular DFS but increments time variable
-        //first call must be made with null passed in for callerSLL
+    public int DepthFirstSearchTopo(SLL vert, int GlobalTimeF, TopoSLL finalProduct){
+        //same as regular DFS but increments time variable
 
-        if (vert.visited == false) {
-
-            GlobalTimeF++;
-            vert.vertTime = GlobalTimeF;
-            System.out.println("DFS on "+vert.key+ ". vertTime: "+vert.vertTime + ". Global Time: "+GlobalTimeF);
-            vert.visited = true;
-
-        }
-        //System.out.println(vert.key);
-
-        //vert.color = "gray";
-
-        if (callerSLL != null && vert.inTopoList == false) {
-            vert.topoPrev = callerSLL;
-            callerSLL.topoNext = vert;
-            callerSLL.inTopoList = true;
-            vert.inTopoList = true;
+        if (vert == null || vert.visited == true) {
+            return GlobalTimeF;
         }
 
 
-        Node cursor = adjList[vert.key].getHead().getNext();
-        if (cursor == null) return GlobalTimeF;
+        GlobalTimeF++;
+        vert.d_AKA_vertexVisitedTimeStamp = GlobalTimeF;
+        //System.out.println("DFS on "+vert.key+ ". vertTime: "+vert.d_AKA_vertexVisitedTimeStamp + ". Global Time: "+GlobalTimeF);
+        vert.visited = true;
 
-        for (int i = 0; i < adjList.length; i++){
+        //building our topo LL for output
+        Node finalProductNode = new Node(vert.key);
+        finalProductNode.set_d_topoNode_BeganTime(GlobalTimeF);
 
-            //if (adjList[cursor.getValue()].color.equals("white")) {
+        Node cursor = adjList[vert.key].getHead();
+
+
+        for (int i = 0; i < adjList[vert.key].getLLsize(); i++){
+
+
             if (adjList[cursor.getValue()].visited == false) {
 
-                GlobalTimeF = DepthFirstSearchTopo(adjList[cursor.getValue()], vert, GlobalTimeF);
+                GlobalTimeF = DepthFirstSearchTopo(adjList[cursor.getValue()], GlobalTimeF, finalProduct);
+
             }
-            if (cursor.getNext() == null) {
-                return GlobalTimeF;
-            }
-            else {
-                cursor = cursor.getNext();
-            }
+
+
+            cursor = cursor.getNext();
+
 
 
         }
 
-       // vert.color = "black";
+        GlobalTimeF++;
+        vert.f_AKA_vertexDFS_Finished_timestamp = GlobalTimeF;
+        finalProductNode.set_f_topoNode_FinishedTime(GlobalTimeF);
+
+        finalProduct.insertNode(finalProductNode); //inserted into the front of our linked list
         return GlobalTimeF;
     }
 
-    public void BreadthFirstSearch(){
-
+    public void BreadthFirstSearch(){ //not written
     }
 
-    public void TopoPrint(){
-        SLL vertCursor = adjList[0];
-        while (vertCursor.topoPrev != null){
-            vertCursor = vertCursor.topoPrev;
-        }
-        while (vertCursor.topoNext != null){
-            System.out.print(vertCursor.key + ", ");
-            vertCursor = vertCursor.topoNext;
-        }
 
-    }
 
     public void TopoSort(int GlobalTimeF){
 //        GlobalTimeF = 0;
+        TopoSLL finalProduct = new TopoSLL();
 
         for (int i = 0; i < adjList.length; i++){
-            GlobalTimeF = DepthFirstSearchTopo(adjList[i], null, GlobalTimeF);
+            GlobalTimeF = DepthFirstSearchTopo(adjList[i], GlobalTimeF, finalProduct);
         }
 
-        System.out.println(GlobalTimeF);
-
-        TopoPrint();
+        //System.out.println("Global Time: " + GlobalTimeF);
+        finalProduct.printTopoSLL();
+        System.out.println();
+        //finalProduct.printTopoSLLInformative();
 
     }
 
+
 }
+
+
+
+// Adjust functions not needed because input is garunteed to be 0...n-1
+
+//    public int[] adjustForArraySizeVariability(int vertKey){
+//        //adjusts in case that 0 is not a node in the list.
+//        int[] forLoopValues = {0, adjList[vertKey].getLLsize()};
+//
+//        if (this.adjList[0] == null) {
+//            forLoopValues[0]++;
+//            forLoopValues[1] = adjList[vertKey].getLLsize();
+//        }
+//        return forLoopValues;
+//    }
+//
+//    public int[] adjustForArraySizeVariability(){
+//        //adjusts in case that 0 is not a node in the list.
+//        int[] forLoopValues = {0, adjList.length};
+//
+//        if (this.adjList[0] == null) {
+//            forLoopValues[0]++;
+//            forLoopValues[1]--;
+//        }
+//        return forLoopValues;
+//    }
+
+
+
+
+
+//    public void TopoPrint(){
+//        SLL vertCursor = adjList[0];
+//        while (vertCursor.topoPrev != null){
+//            vertCursor = vertCursor.topoPrev;
+//        }
+//        while (vertCursor.topoNext != null){
+//            System.out.print(vertCursor.key + ", ");
+//            vertCursor = vertCursor.topoNext;
+//        }
+//
+//    }

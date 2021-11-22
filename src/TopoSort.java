@@ -64,7 +64,7 @@ If keys are inserted into occupied indexes, room is made by moving
             System.out.println("e: " + e.getStackTrace());
         }
 
-        graph.printAdjList();
+        //graph.printAdjList();
 
         //graph.DepthFirstSearch(graph.adjList[0]);
         int GlobalTimeF = 0;

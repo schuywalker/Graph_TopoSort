@@ -3,8 +3,8 @@ public class Node {
     private int value;
     public Node next;
     //public String color;
-    public int d;
-
+    private int f_topoNode_finishedTime;//only used for TopoSLL, not in actual toposort
+    private int d_topoNode_beganTime;
 
     private Node[] edges; /// ????????
 
@@ -31,6 +31,19 @@ public class Node {
 
     public void setNext(Node next){
         this.next = next;
+    }
+
+    public int get_f_topoNode_FinishedTime(){
+        return this.f_topoNode_finishedTime;
+    }
+    public void set_f_topoNode_FinishedTime(int d_topoNodeTime){
+        this.f_topoNode_finishedTime = d_topoNodeTime;
+    }
+    public int get_d_topoNode_BeganTime(){
+        return this.d_topoNode_beganTime;
+    }
+    public void set_d_topoNode_BeganTime(int d_topoNodeTime){
+        this.d_topoNode_beganTime = d_topoNodeTime;
     }
 
 }
